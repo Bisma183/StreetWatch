@@ -4,7 +4,7 @@ A mobile app for reporting and tracking road and street hazards.
 
 Course project: Mobile Application Development (SE-458), NED University of Engineering and Technology, Karachi.
 
-**Team:** Bisma Ahmed (SE-23010), Alishba (SE-23032)
+**Team:** Bisma Ahmed, Alishba
 
 **Status:** In development (Week 1)
 
