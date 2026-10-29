@@ -11,6 +11,9 @@ export function AppProvider({ children }) {
     async function loadToken() {
       try {
         const savedToken = await getToken();
+
+        console.log("token found:", savedToken ? "yes" : "no");
+
         setToken(savedToken);
       } catch (error) {
         console.error("Failed to load token:", error);
@@ -23,13 +26,26 @@ export function AppProvider({ children }) {
   }, []);
 
   async function login(newToken) {
-    await saveToken(newToken);
-    setToken(newToken);
+    try {
+      await saveToken(newToken);
+      console.log("token saved: yes");
+      setToken(newToken);
+    } catch (error) {
+      console.error("Failed to save token:", error);
+      throw error;
+    }
   }
-
   async function logout() {
-    await deleteToken();
-    setToken(null);
+    try {
+      await deleteToken();
+
+      const savedToken = await getToken();
+      console.log("token found after logout:", savedToken ? "yes" : "no");
+
+      setToken(null);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   }
 
   return (
