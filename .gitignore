@@ -3,3 +3,7 @@ __pycache__/
 *.db
 .env
 node_modules/
+.expo/
+dist/
+*.apk
+uploads/
