@@ -8,9 +8,13 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAppContext } from "../context/AppContext";
+import { useEffect, useState } from "react";
+import API from "../api/api";
 
-export default function HomeScreen() {
-  const { logout } = useAppContext();
+export default function HomeScreen({ navigation }) {
+  const { logout, token } = useAppContext();
+  const [admin, setAdmin] = useState(false);
+  useEffect(() => { let active = true; API.get("/me", { headers: { Authorization: `Bearer ${token}` } }).then(r => { if(active) setAdmin(!!r.data.is_admin); }).catch(() => {}); return () => { active = false; }; }, [token]);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
@@ -37,9 +41,20 @@ export default function HomeScreen() {
           Help make your neighbourhood a better place to live.
         </Text>
 
-        <Pressable style={styles.reportButton}>
+        <Pressable style={styles.reportButton} onPress={() => navigation.navigate("Report")}>
           <Text style={styles.reportButtonText}>＋ Report an issue</Text>
         </Pressable>
+
+        <Pressable style={[styles.reportButton, { backgroundColor: "#334A60", marginBottom: 18 }]} onPress={() => navigation.navigate("Issues")}>
+          <Text style={styles.reportButtonText}>View community issues</Text>
+        </Pressable>
+
+        <Pressable style={[styles.reportButton, { backgroundColor: "#426879", marginBottom: 12 }]} onPress={() => navigation.navigate("Map")}>
+          <Text style={styles.reportButtonText}>View hazard map</Text>
+        </Pressable>
+        {admin && <Pressable style={[styles.reportButton, { backgroundColor: "#704B3E", marginBottom: 18 }]} onPress={() => navigation.navigate("Admin")}>
+          <Text style={styles.reportButtonText}>Admin dashboard</Text>
+        </Pressable>}
 
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Your community</Text>

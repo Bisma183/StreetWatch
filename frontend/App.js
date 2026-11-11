@@ -7,6 +7,12 @@ import { AppProvider, useAppContext } from "./context/AppContext";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import HomeScreen from "./screens/HomeScreen";
+import ReportScreen from "./screens/ReportScreen";
+import IssuesScreen from "./screens/IssuesScreen";
+import IssueDetailScreen from "./screens/IssueDetailScreen";
+import MapScreen from "./screens/MapScreen";
+import AdminScreen from "./screens/AdminScreen";
+import NotificationSetup from "./components/NotificationSetup";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,10 +34,19 @@ function AppNavigator() {
   }
 
   return (
+    <>
+    {token ? <NotificationSetup /> : null}
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {token ? (
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Report" options={{ headerShown: true, title: "Report" }} component={ReportScreen} />
+            <Stack.Screen name="Issues" options={{ headerShown: true, title: "Issues" }} component={IssuesScreen} />
+            <Stack.Screen name="IssueDetail" options={{ headerShown: true, title: "Issue details" }} component={IssueDetailScreen} />
+            <Stack.Screen name="Map" options={{ headerShown: true, title: "Map" }} component={MapScreen} />
+            <Stack.Screen name="Admin" options={{ headerShown: true, title: "Admin" }} component={AdminScreen} />
+          </>
         ) : (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
@@ -40,6 +55,7 @@ function AppNavigator() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
+    </>
   );
 }
 

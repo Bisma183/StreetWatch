@@ -1,9 +1,32 @@
-venv/
+# Python
 __pycache__/
-*.db
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Environment variables and secrets
 .env
+.env.*
+!.env.example
+
+# Database and uploads
+*.db
+*.sqlite
+*.sqlite3
+backend/uploads/
+
+# React Native / Expo
 node_modules/
 .expo/
+.expo-shared/
 dist/
+web-build/
+
+# Local build files
 *.apk
-uploads/
+*.aab
+
+# Operating system
+.DS_Store
+Thumbs.db

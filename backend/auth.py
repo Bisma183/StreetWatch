@@ -9,13 +9,15 @@ from database import get_dbsession
 from models import User
 from security import decode_access_token
 
-bearer_scheme = HTTPBearer()
+bearer_scheme = HTTPBearer(auto_error=False)
 
 
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
     db: Session = Depends(get_dbsession)
 ):
+    if credentials is None:
+        raise HTTPException(status_code=401, detail="Authentication required", headers={"WWW-Authenticate": "Bearer"})
     token = credentials.credentials
 
     user_id = decode_access_token(token)

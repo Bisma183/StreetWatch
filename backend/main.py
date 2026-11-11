@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from database import Base, engine, get_dbsession
 from models import User
-from schemas import UserCreate, UserOut, LoginRequest, Token
+from schemas import UserCreate, UserOut, LoginRequest, Token, PushTokenRegistration
 from security import hash_password, verify_password, create_access_token
 
 from auth import get_current_user
@@ -83,3 +83,16 @@ def login(login_data: LoginRequest, db: Session = Depends(get_dbsession)):
 @app.get("/me", response_model=UserOut)
 def get_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+# StreetWatch hazard routes
+from routers.issues import router as issues_router
+app.include_router(issues_router)
+
+
+@app.put("/me/push-token")
+def register_push_token(payload: PushTokenRegistration, current_user: User = Depends(get_current_user), db: Session = Depends(get_dbsession)):
+    if not (payload.push_token.startswith("ExponentPushToken[") or payload.push_token.startswith("ExpoPushToken[")):
+        raise HTTPException(422, "Invalid Expo push token")
+    current_user.push_token = payload.push_token
+    db.commit()
+    return {"registered": True}

@@ -18,6 +18,7 @@ class UserOut(BaseModel):
     id: int
     name: str
     email: EmailStr
+    is_admin: bool = False
 
     model_config = {"from_attributes": True}
 
@@ -29,3 +30,6 @@ class LoginRequest(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+class PushTokenRegistration(BaseModel):
+    push_token: str = Field(min_length=10,max_length=300)
